@@ -4,7 +4,7 @@ import Controls from "./components/Controls.vue";
 import { store } from "./store";
 // import { ref } from "vue";
 
-const startGame = () => {};
+const tiles = store.getters.tiles;
 </script>
 
 <template>
@@ -14,16 +14,7 @@ const startGame = () => {};
 
   <div class="media">
     <PuzzleBoard />
-    <div class="media-body">
-      <button
-        v-if="store.getters.selectedImage.value"
-        @click="startGame"
-        type="button"
-        class="btn btn-success"
-      >
-        Start
-      </button>
-    </div>
+    <div class="media-body"></div>
   </div>
 </template>
 

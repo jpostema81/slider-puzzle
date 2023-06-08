@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import PuzzleBoard from "./components/PuzzleBoard.vue";
 import Controls from "./components/Controls.vue";
-import { store } from "./store";
-// import { ref } from "vue";
-
-const tiles = store.getters.tiles;
 </script>
 
 <template>
@@ -18,9 +14,4 @@ const tiles = store.getters.tiles;
   </div>
 </template>
 
-<style scoped>
-#selectedImage {
-  margin: 50px;
-  width: 400px;
-}
-</style>
+<style scoped></style>

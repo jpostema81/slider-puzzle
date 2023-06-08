@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { store } from "./../store";
-// import { ref } from "vue";
+import store from "./../store";
+import Tile from "../components/Tile.vue";
+import { computed } from "vue";
+
+const classObject = computed(() => ({
+  display: "grid",
+  border: "5px solid black",
+  margin: "0 auto",
+  width: store.getters.selectedImageDimensions.value.width + "px",
+  height: store.getters.selectedImageDimensions.value.height + "px",
+  "grid-template-columns":
+    "repeat(" + store.getters.nbColumns.value + ", auto)",
+}));
 </script>
 
 <template>
-  <img
-    v-if="store.getters.selectedImage.value"
-    id="selectedImage"
-    :src="store.getters.selectedImage.value"
-    class="mx-auto"
-  />
+  <!-- <img :src="store.getters.selectedImage.value" alt="" /> -->
+  <div v-if="store.getters.selectedImage.value" :style="classObject">
+    <Tile v-for="item in store.getters.tiles.value" :tile="item" />
+  </div>
 </template>
 
-<style scoped>
-#selectedImage {
-  margin: 50px;
-  width: 400px;
-}
-</style>
+<style scoped></style>

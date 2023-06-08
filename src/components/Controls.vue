@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { store } from "./../store";
+import store from "./../store";
 
 const updateNbRows = ({ target }: Event): void => {
   store.actions.setNbRows(+(target as HTMLInputElement).value);
@@ -16,9 +16,14 @@ function readFile({ target }: Event): void {
   ) {
     var reader = new FileReader();
 
-    reader.onload = ({ target }: Event): void => {
-      if ((target as FileReader).result) {
-        store.actions.setSelectedImage((target as FileReader).result as string);
+    reader.onload = (file): void => {
+      const image = new Image();
+
+      if (file.target) {
+        image.src = file.target.result as string;
+        image.onload = () => {
+          store.actions.setSelectedImage(image);
+        };
       }
     };
 

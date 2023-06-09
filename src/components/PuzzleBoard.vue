@@ -17,7 +17,11 @@ const classObject = computed(() => ({
 <template>
   <!-- <img :src="store.getters.selectedImage.value" alt="" /> -->
   <div v-if="store.getters.selectedImage.value" :style="classObject">
-    <Tile v-for="item in store.getters.tiles.value" :tile="item" />
+    <Tile
+      v-for="(item, index) in store.getters.tiles.value"
+      :index="index"
+      :tile="item"
+    />
   </div>
 </template>
 

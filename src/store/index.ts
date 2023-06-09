@@ -6,6 +6,7 @@ type State = {
   selectedImage: string;
   selectedImageDimensions: object;
   shuffledIndexes: number[];
+  openTileIndex: number;
 };
 
 const store = {
@@ -15,6 +16,7 @@ const store = {
     selectedImage: "",
     selectedImageDimensions: { width: 0, height: 0 },
     shuffledIndexes: [],
+    openTileIndex: 0,
   } as State),
 
   getters: {
@@ -50,27 +52,29 @@ const store = {
       }
     }),
     tiles: computed(() => {
-      let tiles = [];
+      let tiles = [
+        {
+          width: store.getters.tileDimensions.value.width + "px",
+          height: store.getters.tileDimensions.value.height + "px",
+          "background-color": "white",
+          border: "1px solid black",
+          id: "openTile",
+          order: store.state.shuffledIndexes[0],
+        },
+      ];
 
-      for (let i = 0; i < store.getters.nbCells.value; i++) {
+      for (let i = 1; i < store.getters.nbCells.value; i++) {
         const rowNb = Math.floor(i / store.state.nbColumns);
         const colNb = i - rowNb * store.state.nbColumns;
         const offsetX = -1 * colNb * store.getters.tileDimensions.value.width;
         const offsetY = -1 * rowNb * store.getters.tileDimensions.value.height;
-
-        console.log(rowNb);
-        console.log(colNb);
-        console.log(offsetX);
-        console.log(offsetY);
-        console.log("===========");
 
         tiles.push({
           width: store.getters.tileDimensions.value.width + "px",
           height: store.getters.tileDimensions.value.height + "px",
           background: "url('" + store.state.selectedImage + "')",
           "background-position": offsetX + "px " + offsetY + "px",
-          border: "1px solid black",
-          order: i,
+          order: store.state.shuffledIndexes[i],
         });
       }
 
@@ -115,19 +119,21 @@ const store = {
       store.state.selectedImage = canvas.toDataURL();
     },
     startGame: (): void => {
-      // store.actions.setShuffledIndexes();
+      store.actions.shuffleTiles();
     },
-    // shuffleArray: (items: number[]): number[] => {
-    //   for (let i = items.length - 1; i > 0; i--) {
-    //     const j = Math.floor(Math.random() * (i + 1));
-    //     [items[i], items[j]] = [items[j], items[i]];
-    //   }
-    //   return items;
-    // },
-    // setShuffledIndexes: () => {
-    //   const range = [...Array(store.getters.nbCells).keys()];
-    //   store.state.shuffledIndexes = range;
-    // },
+    moveTile: (index: number): void => {
+      const temp = store.state.shuffledIndexes[store.state.openTileIndex];
+
+      store.state.shuffledIndexes[store.state.openTileIndex] =
+        store.state.shuffledIndexes[index];
+      store.state.shuffledIndexes[index] = temp;
+    },
+
+    shuffleTiles: () => {
+      const range = [...Array(store.getters.nbCells.value).keys()];
+      store.state.shuffledIndexes = range;
+      console.log(range);
+    },
   },
 };
 

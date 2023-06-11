@@ -7,6 +7,8 @@ import store from "./store/index";
 <template>
   <h1>Slider Puzzle</h1>
 
+  <h2 v-if="store.getters.won.value">You won!</h2>
+
   <Controls />
 
   <div class="media">

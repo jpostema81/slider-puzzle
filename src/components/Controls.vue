@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import store from "./../store";
+import { GameState } from "../types";
 
 const updateNbRows = ({ target }: Event): void => {
   store.actions.setNbRows(+(target as HTMLInputElement).value);
@@ -56,7 +57,7 @@ function readFile({ target }: Event): void {
   />
 
   <button
-    v-if="store.getters.selectedImage.value"
+    v-if="store.state.gameState === GameState.Stopped"
     @click="store.actions.startGame"
     type="button"
     class="btn btn-success m-1"
@@ -65,8 +66,8 @@ function readFile({ target }: Event): void {
   </button>
 
   <button
-    v-if="store.getters.selectedImage.value"
-    @click="toggleOriginalImage"
+    v-if="store.getters.gameState.value !== GameState.Stopped"
+    @click="store.actions.toggleOriginalImage"
     type="button"
     class="btn btn-info m-1"
   >
@@ -74,7 +75,7 @@ function readFile({ target }: Event): void {
   </button>
 
   <button
-    v-if="store.getters.selectedImage.value"
+    v-if="store.getters.gameState.value !== GameState.Stopped"
     @click="resetImage"
     type="button"
     class="btn btn-danger m-1"
@@ -83,7 +84,7 @@ function readFile({ target }: Event): void {
   </button>
 
   <button
-    v-if="store.getters.selectedImage.value"
+    v-if="store.getters.gameState.value !== GameState.Stopped"
     @click="store.actions.newGame"
     type="button"
     class="btn btn-warning m-1"

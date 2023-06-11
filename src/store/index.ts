@@ -83,6 +83,13 @@ const store = {
   },
 
   actions: {
+    toggleOriginalImage: (): void => {
+      if (store.state.gameState === GameState.Started) {
+        store.state.gameState = GameState.Paused;
+      } else {
+        store.state.gameState = GameState.Started;
+      }
+    },
     setNbRows: (nbRows: number): void => {
       store.state.nbRows = nbRows;
     },
@@ -135,6 +142,12 @@ const store = {
 
     shuffleTiles: () => {
       const range = [...Array(store.getters.nbCells.value).keys()];
+
+      for (let i = range.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [range[i], range[j]] = [range[j], range[i]];
+      }
+
       store.state.shuffledIndexes = range;
       console.log(range);
     },

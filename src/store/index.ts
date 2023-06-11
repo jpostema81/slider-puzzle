@@ -1,13 +1,5 @@
 import { computed, reactive } from "vue";
-
-type State = {
-  nbRows: number;
-  nbColumns: number;
-  selectedImage: string;
-  selectedImageDimensions: object;
-  shuffledIndexes: number[];
-  openTileIndex: number;
-};
+import { State, GameState } from "../types";
 
 const store = {
   state: reactive({
@@ -17,15 +9,23 @@ const store = {
     selectedImageDimensions: { width: 0, height: 0 },
     shuffledIndexes: [],
     openTileIndex: 0,
+    gameState: GameState.Stopped,
   } as State),
 
   getters: {
+    gameState: computed(() => store.state.gameState),
     nbRows: computed(() => store.state.nbRows),
     nbColumns: computed(() => store.state.nbColumns),
     nbCells: computed(() => store.state.nbRows * store.state.nbColumns),
     selectedImage: computed(() => store.state.selectedImage),
     selectedImageDimensions: computed(() => {
       return store.state.selectedImageDimensions;
+    }),
+    won: computed(() => {
+      return (
+        JSON.stringify(store.state.shuffledIndexes) ===
+        JSON.stringify([...Array(store.getters.nbCells.value).keys()])
+      );
     }),
     tileDimensions: computed(() => {
       if (
@@ -104,8 +104,8 @@ const store = {
       store.state.selectedImageDimensions.height = height;
 
       // create an off-screen canvas
-      var canvas = document.createElement("canvas"),
-        ctx = canvas.getContext("2d");
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
       // set its dimension to target size
       canvas.width = width;
@@ -120,6 +120,10 @@ const store = {
     },
     startGame: (): void => {
       store.actions.shuffleTiles();
+      store.state.gameState = GameState.Started;
+    },
+    newGame: (): void => {
+      store.state.gameState = GameState.Stopped;
     },
     moveTile: (index: number): void => {
       const temp = store.state.shuffledIndexes[store.state.openTileIndex];

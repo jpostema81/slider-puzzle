@@ -84,7 +84,7 @@ function readFile({ target }: Event): void {
 
   <button
     v-if="store.getters.selectedImage.value"
-    @click="newGame"
+    @click="store.actions.newGame"
     type="button"
     class="btn btn-warning m-1"
   >

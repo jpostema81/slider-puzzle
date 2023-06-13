@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import store from "./../store";
 import { GameState } from "../types";
+import { maxNbColumns, maxNbRows } from "./consts";
 
 const updateNbRows = ({ target }: Event): void => {
   store.actions.setNbRows(+(target as HTMLInputElement).value);
@@ -41,7 +42,7 @@ function readFile({ target }: Event): void {
   <input
     type="number"
     min="2"
-    max="5"
+    max="maxNbRows"
     :value="store.getters.nbRows.value"
     @change="updateNbRows"
     class="smallInput"
@@ -50,7 +51,7 @@ function readFile({ target }: Event): void {
   <input
     type="number"
     min="2"
-    max="5"
+    max="maxNbColumns"
     :value="store.getters.nbColumns.value"
     @change="updateNbColumns"
     class="smallInput"

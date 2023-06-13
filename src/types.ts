@@ -10,6 +10,5 @@ export type State = {
   selectedImage: string;
   selectedImageDimensions: object;
   shuffledIndexes: number[];
-  openTileIndex: number;
   gameState: GameState | string;
 };

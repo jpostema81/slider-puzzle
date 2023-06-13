@@ -20,8 +20,7 @@ const classObject = computed(() => ({
   <div v-if="store.getters.selectedImage.value" :style="classObject">
     <Tile
       v-if="store.getters.gameState.value === GameState.Started"
-      v-for="(item, index) in store.getters.tiles.value"
-      :index="index"
+      v-for="item in store.getters.tiles.value"
       :tile="item"
     />
   </div>

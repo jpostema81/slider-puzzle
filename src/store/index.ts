@@ -8,7 +8,6 @@ const store = {
     selectedImage: "",
     selectedImageDimensions: { width: 0, height: 0 },
     shuffledIndexes: [],
-    openTileIndex: 0,
     gameState: GameState.Stopped,
   } as State),
 
@@ -58,7 +57,6 @@ const store = {
           height: store.getters.tileDimensions.value.height + "px",
           "background-color": "white",
           border: "1px solid black",
-          id: "openTile",
           order: store.state.shuffledIndexes[0],
         },
       ];
@@ -133,11 +131,34 @@ const store = {
       store.state.gameState = GameState.Stopped;
     },
     moveTile: (index: number): void => {
-      const temp = store.state.shuffledIndexes[store.state.openTileIndex];
+      // tiles can move horizontally only within the same row
+      // tiles can move vertically inly within the same column
 
-      store.state.shuffledIndexes[store.state.openTileIndex] =
-        store.state.shuffledIndexes[index];
-      store.state.shuffledIndexes[index] = temp;
+      const openTileOrderNb = store.state.shuffledIndexes[0];
+
+      const rowNbOpenTile = Math.floor(openTileOrderNb / store.state.nbColumns);
+      const rowNbClickedTile = Math.floor(index / store.state.nbColumns);
+
+      const columnOpenTile = openTileOrderNb % store.state.nbRows;
+      const columnClickedTile = index % store.state.nbRows;
+
+      if (
+        (rowNbOpenTile === rowNbClickedTile &&
+          Math.abs(index - openTileOrderNb) === 1) ||
+        (columnOpenTile === columnClickedTile &&
+          Math.abs(index - openTileOrderNb) === store.state.nbColumns)
+      ) {
+        const openTileValue = store.state.shuffledIndexes[0];
+        const clickedTileIndex = store.state.shuffledIndexes.findIndex(
+          (item) => item === index
+        );
+
+        store.state.shuffledIndexes[0] =
+          store.state.shuffledIndexes[clickedTileIndex];
+        store.state.shuffledIndexes[clickedTileIndex] = openTileValue;
+      } else {
+        console.log("row and column not the same...");
+      }
     },
 
     shuffleTiles: () => {

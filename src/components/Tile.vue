@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import store from "../store";
 
-const props = defineProps(["tile", "index"]);
+const props = defineProps(["tile"]);
 
 const moveTile = () => {
-  console.log(props.index);
-  console.log("tile clicked");
-  store.actions.moveTile(props.index);
+  store.actions.moveTile(props.tile.order);
 };
 </script>
 

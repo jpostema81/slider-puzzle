@@ -24,7 +24,8 @@ const store = {
     won: computed(() => {
       return (
         JSON.stringify(store.state.shuffledIndexes) ===
-        JSON.stringify([...Array(store.getters.nbCells.value).keys()])
+          JSON.stringify([...Array(store.getters.nbCells.value).keys()]) &&
+        store.state.gameState === GameState.Started
       );
     }),
     tileDimensions: computed(() => {
@@ -129,21 +130,13 @@ const store = {
       store.state = reactive(Object.assign(store.state, defaultState));
     },
     moveTile: (index: number): void => {
-      // tiles can move horizontally only within the same row
-      // tiles can move vertically inly within the same column
       const openTileOrderNb =
         store.state.shuffledIndexes[store.getters.nbCells.value - 1];
 
-      const rowNbOpenTile = Math.floor(openTileOrderNb / store.state.nbColumns);
-      const rowNbClickedTile = Math.floor(index / store.state.nbColumns);
-
-      const columnOpenTile = openTileOrderNb % store.state.nbRows;
-      const columnClickedTile = index % store.state.nbRows;
-
       if (
-        (rowNbOpenTile === rowNbClickedTile &&
+        (store.actions.sameRow(index, openTileOrderNb) &&
           Math.abs(index - openTileOrderNb) === 1) ||
-        (columnOpenTile === columnClickedTile &&
+        (store.actions.sameColumn(index, openTileOrderNb) &&
           Math.abs(index - openTileOrderNb) === store.state.nbColumns)
       ) {
         const clickedTileIndex = store.state.shuffledIndexes.findIndex(
@@ -217,7 +210,6 @@ const store = {
 
         previousOpenTileIndex = openTileOrderNb;
         store.actions.moveTile(randomAscendingIndex);
-        // await new Promise((r) => setTimeout(r, 50));
       }
     },
   },

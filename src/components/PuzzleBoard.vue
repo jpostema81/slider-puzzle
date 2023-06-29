@@ -6,7 +6,6 @@ import { GameState } from "../types";
 
 const classObject = computed(() => ({
   display: "grid",
-  border: "5px solid black",
   margin: "0 auto",
   "background-image": "url(" + store.getters.selectedImage.value + ")",
   width: store.getters.selectedImageDimensions.value.width + "px",

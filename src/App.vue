@@ -2,6 +2,8 @@
 import PuzzleBoard from "./components/PuzzleBoard.vue";
 import Controls from "./components/Controls.vue";
 import store from "./store/index";
+
+store.actions.newGame();
 </script>
 
 <template>

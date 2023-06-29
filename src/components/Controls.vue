@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import store from "./../store";
 import { GameState } from "../types";
-import { maxNbColumns, maxNbRows } from "./consts";
 
 const updateNbRows = ({ target }: Event): void => {
   store.actions.setNbRows(+(target as HTMLInputElement).value);
@@ -35,36 +34,41 @@ function readFile({ target }: Event): void {
 </script>
 
 <template>
-  Select an image:
-  <input type="file" @change="readFile" />
+  <div v-if="store.state.gameState === GameState.Stopped">
+    Select an image:
+    <input type="file" @change="readFile" />
 
-  Board size
-  <input
-    type="number"
-    min="2"
-    max="maxNbRows"
-    :value="store.getters.nbRows.value"
-    @change="updateNbRows"
-    class="smallInput"
-  />
-  x
-  <input
-    type="number"
-    min="2"
-    max="maxNbColumns"
-    :value="store.getters.nbColumns.value"
-    @change="updateNbColumns"
-    class="smallInput"
-  />
+    Board size
+    <input
+      type="number"
+      min="2"
+      max="maxNbRows"
+      :value="store.getters.nbRows.value"
+      @change="updateNbRows"
+      class="smallInput"
+    />
+    x
+    <input
+      type="number"
+      min="2"
+      max="maxNbColumns"
+      :value="store.getters.nbColumns.value"
+      @change="updateNbColumns"
+      class="smallInput"
+    />
 
-  <button
-    v-if="store.state.gameState === GameState.Stopped"
-    @click="store.actions.startGame"
-    type="button"
-    class="btn btn-success m-1"
-  >
-    Start
-  </button>
+    <button
+      @click="store.actions.startGame"
+      type="button"
+      class="btn btn-success m-1"
+      v-if="
+        store.state.gameState === GameState.Stopped &&
+        store.getters.selectedImage.value
+      "
+    >
+      Start
+    </button>
+  </div>
 
   <button
     v-if="store.getters.gameState.value !== GameState.Stopped"
@@ -77,7 +81,7 @@ function readFile({ target }: Event): void {
 
   <button
     v-if="store.getters.gameState.value !== GameState.Stopped"
-    @click="resetImage"
+    @click="store.actions.resetGame"
     type="button"
     class="btn btn-danger m-1"
   >

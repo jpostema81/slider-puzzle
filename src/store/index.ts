@@ -183,8 +183,8 @@ const store = {
     },
     sameColumn: (firstIndex: number, secondIndex: number) => {
       return (
-        Math.floor(firstIndex % store.state.nbRows) ===
-        Math.floor(secondIndex % store.state.nbRows)
+        Math.floor(firstIndex % store.state.nbColumns) ===
+        Math.floor(secondIndex % store.state.nbColumns)
       );
     },
     shuffleTiles: async () => {
